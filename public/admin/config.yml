@@ -2,7 +2,10 @@ backend:
   name: astrod
   repo: co0kie/astrod
   branch: main
-local_backend: true
+  site_domain: localhost:4321
+  base_url: http://localhost:4321
+  auth_endpoint: oauth
+
 media_folder: src/assets/img
 public_folder: src/assets/img
 
