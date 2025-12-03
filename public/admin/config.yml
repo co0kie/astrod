@@ -1,6 +1,6 @@
 backend:
-  name: git-gateway
-  repo: username/reponame
+  name: astrod
+  repo: co0kie/astrod
   branch: main
 local_backend: true
 media_folder: src/assets/img
