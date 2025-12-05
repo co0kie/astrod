@@ -1,59 +1,114 @@
-# Decap Starter
+# Welcome to Blogsmith Free!
 
-1. Set up GitHub OAuth app
+This is a free theme for Astro created by [Cosmic Themes](https://cosmicthemes.com/). This is a great starting point with various pages, features, and utilities to help you get started with your blog.
 
-   On GitHub, go to `Settings > Developer Settings > OAuth apps > New OAuth app` or use this [direct link](https://github.com/settings/applications/new).
+[website demo](https://blogsmithfree.cosmicthemes.com/)
 
-   **Homepage URL**: This must be the prod URL of your application. You can use `localhost:4321` during dev if you want.
+## Quickstart
 
-   **Authorization callback URL**: This must be the prod URL of your application followed by `/oauth/callback`.
+1. Fork this project to your own repository, and clone it to your local machine
+2. Install all necessary packages with `npm install` or `pnpm install`
+3. Run `npm run dev` or `pnpm dev` to start the dev server
+4. Now you can setup the site to your liking!
+   - [Style customization](https://cosmicthemes.com/docs/styles/)
+   - [Content editing](https://cosmicthemes.com/docs/content/)
+   - [Forms](https://cosmicthemes.com/docs/contact-form/)
+5. Update the site URL in `astro.config.mjs` and `/public/robots.txt` to match your domain
+6. After you're happy, update your changes to your repo and [deploy to Netlify, Vercel, Cloudflare](https://cosmicthemes.com/deployment/), or other provider of your choice
 
-2. Set up your config
+## Code Intro
 
-   `/public/admin/config.yml`
+I have created a code tour to introduce you to the codebase. You will need the extension [Code Tour](https://marketplace.visualstudio.com/items?itemName=vsls-contrib.codetour) to view them in VSCode.
 
-   - Need to change the `repo`, `sitename`, and `base_url`
-   - Can change the collections fields or media folder
+The source files have the following setup. Note that not all files are listed here.
 
-3. Update env vars
-   - Add your `OAUTH_GITHUB_CLIENT_ID` and `OAUTH_GITHUB_CLIENT_SECRET` environmental variables to platform and `.env` file
+```
+.
+├── .tours/
+│   └── code-intro.tour
+├── public/
+│   ├── favicons/
+│   │   └── favicon.ico
+│   ├── images/
+│   └── robots.txt
+├── src/
+│   ├── assets/
+│   │   └── images/
+│   │       └── site-logo.png
+│   ├── components/
+│   │   └── Hero/
+│   │       └── Hero.astro
+│   ├── config/
+│   │   └── navData.json.ts
+│   ├── data/
+│   │   ├── authors/
+│   │   ├── blog/
+│   │   └── otherPages/
+│   ├── js/
+│   │   └── blogUtils.ts
+│   ├── layouts/
+│   │   └── BaseLayout.astro
+│   ├── pages/
+│   │   ├── index.astro
+│   │   ├── blog/
+│   │   │   ├── [...page].astro
+│   │   │   └── [...slug].astro
+│   │   ├── categories/
+│   │   │   ├── [category]/
+│   │   │   │   └── [...page].astro
+│   │   │   └── index.astro
+│   │   ├── [page].astro
+│   │   ├── 404.astro
+│   │   ├── index.astro
+│   │   └── rss.xml.ts
+│   ├── styles/
+│   │   └── global.css
+│   └── content.config.ts
+├── .gitignore
+├── .prettierrc.mjs
+├── astro.config.mjs
+├── keystatic.config.tsx
+├── netlify.toml
+├── package.json
+├── package-lock.json
+├── README.md
+└── tsconfig.json
+```
 
-## How it works
+For robots like Google to see the correct sitemap, you will want to edit the `public/robots.txt` file to use your website domain.
 
-- Github backend of Decap
-  - We create two endpoints used for auth ( `/oauth` and `/oauth/callback` )
-  - Your endpoints are ["on demand"](https://docs.astro.build/en/guides/on-demand-rendering/) endpoints from astro, but your site can remain static.
-- If you have a private repo, you need to add anyone you want to be able to log into the CMS as a collaborator of the repo
+## Other Resources
 
-The Oauth endpoints we create are also responsible for error handling, you should update the error handling on line 53 of [callback.ts](./src/pages/oauth/callback.ts)
+- See my blog post on [recommended Astro web development setup](https://cosmicthemes.com/blog/astro-web-development-setup/).
+- You can learn more information from the [theme docs](https://cosmicthemes.com/docs/) page on the [Cosmic Themes Website](https://cosmicthemes.com/).
 
-## Decap customizations
+## License
 
-I use [these Decap customizations](./src/decap-utils/decap-customizations.js) for Decap because they provide better preview functionality and image handling. We also add [public/preview.css](./public/preview.css) to style the preview the same as our blog route, and this relies on using the `build:tailwind` or `dev:tailwind` scripts to generate the CSS. The preview component classes should match the classes used in your blog route. If you don't want to use Tailwind, you can just add your own CSS to `public/global.css` and change the classes in the preview component. You'll need to keep the css in sync with your blog route manually in that case.
+This project is open source and available under the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-**Configuration:** You can configure the image path transformations and other behavior in [decap-customizations-config.js](./src/decap-utils/decap-customizations-config.js). Currently, this setup uses hardcoded URL transforms in the editor component, so you'll need to update the path patterns in that file if you change your image folder structure.
+However, If you have purchased [All Access](https://cosmicthemes.com/all-access/) from Cosmic Themes, there is a no attribution required license you can view at [License details](https://cosmicthemes.com/license/).
 
-### Image handling
+## General Astro Info
 
-This setup handles images in a way that provides both Astro optimization and working DecapCMS previews:
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-- **DecapCMS saves images** to `src/assets/img/` (the `media_folder`)
-- **DecapCMS references images** as `src/assets/img/` in markdown content for Astro optimization
-- [`vite-plugin-static-copy`](https://www.npmjs.com/package/vite-plugin-static-copy) copies images from `src/assets/img/` to `public/decap-images/` during build for public serving
-- [Custom Decap components](./src/decap-utils/decap-customizations.js) transform `src/assets/img/` paths to `/decap-images/` for DecapCMS preview display
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
 
-**Why this works:**
+Any static assets, like images, can be placed in the `public/` directory. I also frequently use `src/assets` for images when using Astro asssets for image optimization.
 
-- Astro can import and optimize images from `src/assets/img/` paths in markdown content
-- DecapCMS previews need public URLs, so the preview component transforms paths to `/decap-images/`
-- The vite plugin ensures images are available at `/decap-images/` for both preview and production serving
+### Commands
 
-**Important:** This setup requires `"baseUrl": "."` and `"paths": {"src/*": ["src/*"]}` in your `tsconfig.json` for proper path resolution in markdown content.
+All commands are run from the root of the project, from a terminal:
 
-## TO DO
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:3000`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-Make the decap-utils `.ts`, it's not too hard, I just haven't done it yet. Ideally you won't need to mess with this much at all though.
+### Want to learn more?
 
-## Acknowledgements
-
-https://github.com/dorukgezici/astro-decap-cms-oauth
+Feel free to check out the [Astro documentation](https://docs.astro.build).

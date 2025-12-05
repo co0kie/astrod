@@ -1,19 +1,26 @@
 ---
-import { getCollection } from "astro:content";
-import PostLayout from "../../layouts/PostLayout.astro";
+export const prerender = true;
+import BlogLayoutCentered from "@/layouts/BlogLayoutCentered.astro";
+import { getAllPosts } from "@js/blogUtils";
+// layout
+import BlogLayout from "@layouts/BlogLayoutSidebar.astro";
+import { type InferGetStaticPropsType } from "astro";
+import { render } from "astro:content";
 
 export async function getStaticPaths() {
-	const posts = await getCollection("blog");
+	const posts = await getAllPosts();
+
 	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: { post },
+		params: { slug: post.id },
+		props: post,
 	}));
 }
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { title, description, ogImage } = Astro.props.post.data;
-const { Content } = await Astro.props.post.render();
+const post = Astro.props as Props;
+const { Content } = await render(post);
 ---
 
-<PostLayout {title} {description} {ogImage}>
+<BlogLayout post={post}>
 	<Content />
-</PostLayout>
+</BlogLayout>

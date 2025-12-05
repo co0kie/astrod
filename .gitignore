@@ -16,21 +16,12 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+FOR_ME.md
 
 # macOS-specific files
 .DS_Store
 
-# VSCode
-.vscode
-
-# Misc
+# Local hosting provider folders
 .netlify
 .vercel
-.env
-.jampack
-tsconfig.tsbuildinfo
-
-node_modules/
-.env
-.env.local
-.venv
+.wrangler
